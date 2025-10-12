@@ -6,7 +6,7 @@ Este é o repositório do projeto de backend para um sistema de e-commerce, dese
 
 A arquitetura inicial do sistema está baseada no seguinte diagrama de classes:
 
-(docs/modelagem.jpg)
+![Diagrama de Classes](docs/modelagem.jpg)
 
 ## Pré-requisitos
 

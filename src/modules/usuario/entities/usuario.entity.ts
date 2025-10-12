@@ -8,7 +8,7 @@ export class Usuario {
   nome: string;
   email: string;
   senha: string;
-  dataNascimento!: Date;
+  dataNascimento: Date;
   role: Role;
 
   constructor(
