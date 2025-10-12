@@ -1,5 +1,5 @@
 import { Decimal } from 'decimal.js';
-import { PedidoItem } from './pedido-item.entity.js';
+import { ItemPedido } from './pedido-item.entity.js';
 import { Cliente } from '@modules/usuario/entities/usuario.entity.ts';
 import { Endereco } from '@modules/usuario/entities/endereco.entity.ts';
 
@@ -26,7 +26,7 @@ export class Pedido {
   enderecoEntrega?: Endereco; //?: indica atributo opcional
   metodoPagamento?: MetodoPagamento;
   observacao: string;
-  itens: PedidoItem[];
+  itens: ItemPedido[];
 
   constructor(
     id: string,
@@ -36,7 +36,7 @@ export class Pedido {
     enderecoEntrega: Endereco,
     metodoPagamento: MetodoPagamento,
     observacao: string,
-    itens: PedidoItem,
+    itens: ItemPedido,
   ) {
     this.id = id;
     this.cliente = cliente;
@@ -61,19 +61,19 @@ export class Pedido {
     return this.itens.reduce((acc, it) => acc.add(it.subtotal), new Decimal(0));
   }
 
-  adicionarItem(item: PedidoItem): void {
+  adicionarItem(item: ItemPedido): void {
     if (this.status !== StatusPedido.CARRINHO)
       throw new Error('Não é possível alterar itens após fechar o pedido.');
 
-    const existente = this.itens.find((i) => i.produtoID === item.produtoID);
+    const existente = this.itens.find((i) => i.produto.id === item.produto.id);
     if (existente) existente.quantidade += item.quantidade;
     else this.itens.push(item);
   }
 
-  removerItem(item: PedidoItem): void {
+  removerItem(item: ItemPedido): void {
     if (this.status !== StatusPedido.CARRINHO)
       throw new Error('Não é possível alterar itens após fechar o pedido.');
-    this.itens = this.itens.filter((i) => i.produtoID !== item);
+    this.itens = this.itens.filter((i) => i.item !== item);
   }
 
   finalizarPedido(metodo: MetodoPagamento): void {

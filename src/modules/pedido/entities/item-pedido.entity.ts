@@ -29,6 +29,6 @@ export class ItemPedido {
   }
 
   exluir(pedido: Pedido): void {
-    pedido.removerItem(this.produto);
+    pedido.removerItem(this);
   }
 }
