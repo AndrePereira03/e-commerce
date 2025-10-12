@@ -1,4 +1,7 @@
+import { Usuario } from './usuario.entity.ts';
+
 export class Endereco {
+  usuario: Usuario;
   logradouro: string;
   bairro: string;
   numero: string;
@@ -8,6 +11,7 @@ export class Endereco {
   cep: string;
 
   constructor(
+    usuario: Usuario,
     logradouro: string,
     bairro: string,
     numero: string,
@@ -16,6 +20,7 @@ export class Endereco {
     estado: string,
     cep: string,
   ) {
+    this.usuario = usuario;
     this.logradouro = logradouro;
     this.bairro = bairro;
     this.numero = numero;
