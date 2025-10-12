@@ -1,6 +1,7 @@
 {
   "name": "e-commerce",
   "version": "1.0.0",
+  "type": "module",
   "main": "index.js",
   "directories": {
     "doc": "docs"
@@ -24,6 +25,7 @@
     "typescript": "^5.9.3"
   },
   "dependencies": {
+    "decimal.js": "^10.6.0",
     "express": "^5.1.0"
   }
 }
