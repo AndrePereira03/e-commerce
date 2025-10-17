@@ -1,7 +1,8 @@
 import { Decimal } from 'decimal.js';
-import { ItemPedido } from './pedido-item.entity.js';
+import { ItemPedido } from '@modules/pedido/entities/item-pedido.entity.ts';
 import { Cliente } from '@modules/usuario/entities/usuario.entity.ts';
 import { Endereco } from '@modules/usuario/entities/endereco.entity.ts';
+import { Produto } from '@modules/produto/entities/produto.entity.ts';
 
 export enum StatusPedido {
   CARRINHO = 'CARRINHO',
@@ -70,10 +71,17 @@ export class Pedido {
     else this.itens.push(item);
   }
 
-  removerItem(item: ItemPedido): void {
-    if (this.status !== StatusPedido.CARRINHO)
+  removerItem(produtoOuItem: Produto | ItemPedido): void {
+    if (this.status !== StatusPedido.CARRINHO) {
       throw new Error('Não é possível alterar itens após fechar o pedido.');
-    this.itens = this.itens.filter((i) => i.item !== item);
+    }
+    const produtoId =
+      'produto' in produtoOuItem ? produtoOuItem.produto.id : produtoOuItem.id; // fallback
+    this.itens = this.itens.filter(
+      (i) =>
+        i.produto.id !==
+        ('id' in produtoOuItem ? (produtoOuItem as Produto).id : produtoId),
+    );
   }
 
   finalizarPedido(metodo: MetodoPagamento): void {
