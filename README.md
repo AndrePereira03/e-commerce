@@ -1,42 +1,37 @@
-# E-commerce Backend API
+# **E-commerce Back-end API**
 
-Este é o repositório do projeto de backend para um sistema de e-commerce, desenvolvido com foco na consolidação de boas práticas de arquitetura de software, Programação Orientada a Objetos (POO) e desenvolvimento de APIs com TypeScript e Node.js.
+Este projeto é o back-end de um sistema de e-commerce, desenvolvido com foco na consolidação de boas práticas de arquitetura de software, Programação Orientada a Objetos e desenvolvimento de API com TypeScript e Node.js.
 
-## Diagrama de Classes
+## **Diagrama de Classes**
 
 A arquitetura inicial do sistema está baseada no seguinte diagrama de classes:
 
 ![Diagrama de Classes](docs/modelagem.jpg)
 
-## Pré-requisitos
+## **Pré-requisitos**
 
 Antes de começar, você vai precisar ter instalado em sua máquina as seguintes ferramentas:
 
 - [Node.js]
 - [Git]
 
-## Clone e Instalação
+## **Como executar o projeto localmente**
 
 ```bash
 # 1) Clone este repositório:
 
-$ git clone <url-do-seu-repositorio>
+    git clone https://github.com/AndrePereira03/e-commerce.git
 
-# 2) Acesse a pasta do projeto no terminal/cmd
+# 2) Acesse a pasta do projeto
 
-$ cd ecommerce-backend
+    cd e-commerce
 
 # 3) Instale as dependências
 
-$ npm install
-```
-
-## Rodando a Aplicação
-
-```bash
+    npm install
 
 # 4) Rode a aplicação em modo de desenvolvimento
-$ npm run dev
+    npm run dev
 
-# acesse o localhost
+# 5) acesse o localhost
 ```
