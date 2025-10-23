@@ -1,13 +1,10 @@
 import { Decimal } from 'decimal.js';
 import { Pedido } from '../entities/pedido.entity.ts';
-import type {
-  MetodoPagamento,
-  StatusPedido,
-} from '../entities/pedido.entity.ts';
+import { MetodoPagamento, StatusPedido } from '../entities/pedido.entity.ts';
 import { ItemPedido } from '../entities/item-pedido.entity.ts';
-import { Cliente } from '@modules/usuario/entities/usuario.entity.ts';
-import { Endereco } from '@modules/usuario/entities/endereco.entity.ts';
-import { Produto } from '@modules/produto/entities/produto.entity.ts';
+import { Cliente } from '../../../modules/usuario/entities/usuario.entity.ts';
+import { Endereco } from '../../../modules/usuario/entities/endereco.entity.ts';
+import { Produto } from '../../../modules/produto/entities/produto.entity.ts';
 
 export type CriarItemDTO = {
   produto: Produto;
@@ -32,24 +29,21 @@ export function toPedido(dto: CriarPedidoDTO): Pedido {
   );
 
   if (itens.length === 0) {
-    throw new Error('Pedido deve conter ao menos um item');
+    throw new Error('Ao menos um item deve ser informado');
   }
-
-  const primeiroItem = itens[0]!;
 
   const pedido = new Pedido(
     dto.id,
     dto.cliente,
     dto.data,
-    dto.status,
+    StatusPedido.CARRINHO,
     dto.enderecoEntrega,
     dto.metodoPagamento,
     dto.observacao,
-    primeiroItem,
+    itens[0]!,
   );
 
-  for (let i = 1; i < itens.length; i++) {
-    const item = itens[i]!;
+  for (const item of itens) {
     pedido.adicionarItem(item);
   }
 
