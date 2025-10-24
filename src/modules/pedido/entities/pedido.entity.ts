@@ -1,8 +1,8 @@
 import { Decimal } from 'decimal.js';
-import { ItemPedido } from '@modules/pedido/entities/item-pedido.entity.ts';
-import { Cliente } from '@modules/usuario/entities/usuario.entity.ts';
-import { Endereco } from '@modules/usuario/entities/endereco.entity.ts';
-import { Produto } from '@modules/produto/entities/produto.entity.ts';
+import { ItemPedido } from '../../../modules/pedido/entities/item-pedido.entity.ts';
+import { Cliente } from '../../../modules/usuario/entities/usuario.entity.ts';
+import { Endereco } from '../../../modules/usuario/entities/endereco.entity.ts';
+import { Produto } from '../../../modules/produto/entities/produto.entity.ts';
 
 export enum StatusPedido {
   CARRINHO = 'CARRINHO',
