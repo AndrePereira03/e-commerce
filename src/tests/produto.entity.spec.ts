@@ -1,8 +1,29 @@
-import { describe, it, expect } from 'vitest';
+import { describe } from 'vitest';
+import { it } from 'vitest';
+import { beforeEach } from 'vitest';
+import { expect } from 'vitest';
 import { Decimal } from 'decimal.js';
 import { Produto } from '../modules/produto/entities/produto.entity.ts';
 
 describe('Produto', () => {
+  beforeEach(() => {
+    Produto.limparIDs();
+  });
+
+  it('permite produto com id único', () => {
+    const p1 = new Produto('produto23123', 'Computador', Decimal('1950'), 30);
+    const p2 = new Produto('produto23124', 'Notebook', Decimal('3120'), 14);
+
+    expect(p1.id).not.toBe(p2.id);
+  });
+
+  it('rejeita produto com id duplicado', () => {
+    new Produto('produto13213', 'switch', Decimal('52'), 21);
+    expect(
+      () => new Produto('produto13213', 'Processador', Decimal('1350'), 54),
+    ).toThrow(/em uso/i);
+  });
+
   it('cria produto com nome válido', () => {
     const p = new Produto('produto143432', 'Teclado', new Decimal('99.90'), 10);
     expect(p.nome).toBe('Teclado');
@@ -10,10 +31,10 @@ describe('Produto', () => {
 
   it('rejeita preço negativo ou nulo', () => {
     expect(
-      () => new Produto('produto2234234', 'Mouse', new Decimal('-1'), 1),
+      () => new Produto('produto2234234', 'Mouse', new Decimal('-1.0'), 1),
     ).toThrow(/preço/i);
     expect(
-      () => new Produto('produto343244', 'Monitor', new Decimal('0'), 1),
+      () => new Produto('produto343244', 'Monitor', new Decimal('0.0'), 1),
     ).toThrow(/preço/i);
   });
 
@@ -38,8 +59,8 @@ describe('Produto', () => {
   it('rejeita debitar estoque', () => {
     const p = new Produto('produto123123', 'Placa-mãe', new Decimal('400'), 3);
     expect(() => p.debitarEstoque(5)).toThrow(/estoque/i);
-    expect(() => p.debitarEstoque(0)).toThrow(/estoque/i);
-    expect(() => p.debitarEstoque(-5)).toThrow(/estoque/i);
+    expect(() => p.debitarEstoque(0)).toThrow(/quantidade/i);
+    expect(() => p.debitarEstoque(-5)).toThrow(/quantidade/i);
   });
 
   it('permite alterar preco', () => {

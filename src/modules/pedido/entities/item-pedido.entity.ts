@@ -1,6 +1,6 @@
 import { Decimal } from 'decimal.js';
 import { Pedido } from './pedido.entity.ts';
-import { Produto } from '@modules/produto/entities/produto.entity.ts';
+import { Produto } from '../../../modules/produto/entities/produto.entity.ts';
 
 export class ItemPedido {
   produto: Produto;
