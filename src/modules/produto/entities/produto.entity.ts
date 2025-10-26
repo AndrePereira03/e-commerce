@@ -2,6 +2,7 @@ import { Decimal } from 'decimal.js';
 
 export class Produto {
   private static idsUsados = new Set<string>();
+
   id: string;
   nome: string;
   preco: Decimal;
@@ -14,7 +15,7 @@ export class Produto {
     this.estoque = estoque;
 
     if (Produto.idsUsados.has(id)) {
-      throw new Error('ID ${id} já está em uso.');
+      throw new Error('ID já existente.');
     }
 
     Produto.idsUsados.add(id);

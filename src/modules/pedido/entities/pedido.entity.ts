@@ -20,6 +20,8 @@ export enum MetodoPagamento {
 }
 
 export class Pedido {
+  private static idsUsados = new Set<string>();
+
   id: string;
   cliente: Cliente;
   data: Date;
@@ -39,6 +41,11 @@ export class Pedido {
     observacao: string,
     itens: ItemPedido,
   ) {
+    if (Pedido.idsUsados.has(id)) {
+      throw new Error('Pedido com id já existente');
+    }
+    Pedido.idsUsados.add(id);
+
     this.id = id;
     this.cliente = cliente;
     this.data = data;
@@ -51,6 +58,10 @@ export class Pedido {
     if (enderecoEntrega.usuario.cpf != cliente.cpf) {
       throw new Error('Endereco nao pertence ao cliente.');
     }
+  }
+
+  static limparIDs(): void {
+    Pedido.idsUsados.clear();
   }
 
   get clienteCPF(): string {

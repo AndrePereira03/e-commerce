@@ -21,7 +21,7 @@ describe('Produto', () => {
     new Produto('produto13213', 'switch', Decimal('52'), 21);
     expect(
       () => new Produto('produto13213', 'Processador', Decimal('1350'), 54),
-    ).toThrow(/em uso/i);
+    ).toThrow(/existente/i);
   });
 
   it('cria produto com nome válido', () => {
