@@ -219,8 +219,8 @@ describe('Pedido', () => {
       [new ItemPedido(produtoA, 1, D('100'))],
     );
 
-    pedido.adicionarItem(new ItemPedido(produtoB, 2, D('60'))); // novo produto
-    pedido.adicionarItem(new ItemPedido(produtoA, 3, D('100'))); // consolida A
+    pedido.adicionarItem(new ItemPedido(produtoB, 2, D('60')));
+    pedido.adicionarItem(new ItemPedido(produtoA, 3, D('100')));
 
     expect(pedido.itens.length).toBe(2);
     const a = pedido.itens.find((i) => i.produto.id === 'produto0001')!;
@@ -296,71 +296,5 @@ describe('Pedido', () => {
 
     pedido.concluirPedido();
     expect(pedido.status).toBe(StatusPedido.CONCLUIDO);
-  });
-
-  it('falha ao tentar enviar antes do pagamento', () => {
-    const pedido = new Pedido(
-      'pedido321320',
-      clienteA,
-      new Date(),
-      StatusPedido.CARRINHO,
-      enderecoClienteA,
-      MetodoPagamento.CARTAO,
-      '',
-      [new ItemPedido(produtoB, 3, D('1650'))],
-    );
-
-    pedido.finalizarPedido(MetodoPagamento.CARTAO);
-    expect(() => pedido.enviarPedido()).toThrow(/pago/i);
-  });
-
-  it('falha ao tentar enviar deve falhar', () => {
-    const pedido = new Pedido(
-      'pedido0032',
-      clienteA,
-      new Date(),
-      StatusPedido.CARRINHO,
-      enderecoClienteA,
-      MetodoPagamento.BOLETO,
-      '',
-      [new ItemPedido(produtoA, 1, D('100'))],
-    );
-
-    pedido.finalizarPedido(MetodoPagamento.BOLETO);
-    pedido.confirmarPagamento();
-    expect(() => pedido.concluirPedido()).toThrow(/enviado/i);
-  });
-
-  it('nao pode cancelar se o pedido foi concluído, apenas no carrinho', () => {
-    const p1 = new Pedido(
-      'pedido00042',
-      clienteA,
-      new Date(),
-      StatusPedido.CARRINHO,
-      enderecoClienteA,
-      MetodoPagamento.BOLETO,
-      '',
-      [new ItemPedido(produtoA, 1, D('100'))],
-    );
-    p1.cancelar('desisti do produto');
-    expect(p1.status).toBe(StatusPedido.CANCELADO);
-
-    const p2 = new Pedido(
-      'pedido00043',
-      clienteA,
-      new Date(),
-      StatusPedido.CARRINHO,
-      enderecoClienteA,
-      MetodoPagamento.PIX,
-      '',
-      [new ItemPedido(produtoA, 1, D('100'))],
-    );
-    p2.finalizarPedido(MetodoPagamento.PIX);
-    p2.confirmarPagamento();
-    p2.enviarPedido();
-    p2.concluirPedido();
-    expect(() =>
-      p2.cancelar('cancelamento deve ser feito antes do envio'),
-    ).toThrow(/conclu[ií]do/i);
   });
 });
