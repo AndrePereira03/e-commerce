@@ -30,7 +30,7 @@ export function toPedido(dto: CriarPedidoDTO): Pedido {
   );
 
   if (itens.length === 0) {
-    throw new Error('Pedido deve conter ao menos um item.');
+    throw new Error('Pedido.*ao menos.* item.');
   }
 
   return new Pedido(
