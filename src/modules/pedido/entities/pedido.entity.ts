@@ -64,8 +64,17 @@ export class Pedido {
       this.adicionarItemInicial(it);
     }
 
-    if (enderecoEntrega.usuario.cpf !== cliente.cpf) {
+    if (this.enderecoEntrega.usuario.cpf !== cliente.cpf) {
       throw new Error('Endereco nao pertence ao cliente');
+    }
+  }
+
+  private adicionarItemInicial(item: ItemPedido): void {
+    const existente = this.itens.find((i) => i.produto.id === item.produto.id);
+    if (existente) {
+      existente.quantidade += item.quantidade;
+    } else {
+      this.itens.push(item);
     }
   }
 
@@ -140,15 +149,6 @@ export class Pedido {
     this.status = StatusPedido.CANCELADO;
     if (motivo) {
       this.observacao = motivo;
-    }
-  }
-
-  private adicionarItemInicial(item: ItemPedido): void {
-    const existente = this.itens.find((i) => i.produto.id === item.produto.id);
-    if (existente) {
-      existente.quantidade += item.quantidade;
-    } else {
-      this.itens.push(item);
     }
   }
 }
