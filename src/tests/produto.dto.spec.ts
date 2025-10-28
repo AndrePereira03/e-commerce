@@ -8,8 +8,8 @@ import { toProduto } from '../modules/produto/dtos/produto.dto.ts';
 import type { CriarProdutoDTO } from '../modules/produto/dtos/produto.dto.ts';
 import { Produto } from '../modules/produto/entities/produto.entity.ts';
 
-describe('DTO → Produto', () => {
-  it('mapeia DTO para entidade Produto', () => {
+describe('DTO Produto', () => {
+  it('mapeia DTO para Produto', () => {
     const dto: CriarProdutoDTO = {
       id: 'produto1',
       nome: 'Teclado',

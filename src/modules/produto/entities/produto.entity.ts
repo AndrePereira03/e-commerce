@@ -15,7 +15,7 @@ export class Produto {
     this.estoque = estoque;
 
     if (Produto.idsUsados.has(id)) {
-      throw new Error('ID já existente.');
+      throw new Error('Produto com ID já existente.');
     }
 
     Produto.idsUsados.add(id);

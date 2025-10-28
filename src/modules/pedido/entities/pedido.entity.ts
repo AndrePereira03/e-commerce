@@ -26,7 +26,7 @@ export class Pedido {
   cliente: Cliente;
   data: Date;
   status: StatusPedido;
-  enderecoEntrega?: Endereco; //?: indica atributo opcional
+  enderecoEntrega?: Endereco;
   metodoPagamento?: MetodoPagamento;
   observacao: string;
   itens: ItemPedido[];
@@ -39,24 +39,33 @@ export class Pedido {
     enderecoEntrega: Endereco,
     metodoPagamento: MetodoPagamento,
     observacao: string,
-    itens: ItemPedido,
+    itens: ItemPedido[],
   ) {
     if (Pedido.idsUsados.has(id)) {
       throw new Error('Pedido com id já existente');
     }
+
+    if (!Array.isArray(itens) || itens.length === 0) {
+      throw new Error('Pedido deve conter ao menos um item.');
+    }
+
     Pedido.idsUsados.add(id);
 
+    this.status = status;
     this.id = id;
     this.cliente = cliente;
     this.data = data;
-    this.status = status;
     this.enderecoEntrega = enderecoEntrega;
     this.metodoPagamento = metodoPagamento;
     this.observacao = observacao;
     this.itens = [];
 
-    if (enderecoEntrega.usuario.cpf != cliente.cpf) {
-      throw new Error('Endereco nao pertence ao cliente.');
+    for (const it of itens) {
+      this.adicionarItemInicial(it);
+    }
+
+    if (enderecoEntrega.usuario.cpf !== cliente.cpf) {
+      throw new Error('Endereco nao pertence ao cliente');
     }
   }
 
@@ -69,17 +78,19 @@ export class Pedido {
   }
 
   get valorTotal(): Decimal {
-    //soma o subtotal de todos os itens atraves do acumulador
     return this.itens.reduce((acc, it) => acc.add(it.subtotal), new Decimal(0));
   }
 
   adicionarItem(item: ItemPedido): void {
-    if (this.status !== StatusPedido.CARRINHO)
+    if (this.status !== StatusPedido.CARRINHO) {
       throw new Error('Não é possível alterar itens após fechar o pedido.');
-
+    }
     const existente = this.itens.find((i) => i.produto.id === item.produto.id);
-    if (existente) existente.quantidade += item.quantidade;
-    else this.itens.push(item);
+    if (existente) {
+      existente.quantidade += item.quantidade;
+    } else {
+      this.itens.push(item);
+    }
   }
 
   removerItem(produtoOuItem: Produto | ItemPedido): void {
@@ -87,45 +98,57 @@ export class Pedido {
       throw new Error('Não é possível alterar itens após fechar o pedido.');
     }
     const produtoId =
-      'produto' in produtoOuItem ? produtoOuItem.produto.id : produtoOuItem.id; // fallback
-    this.itens = this.itens.filter(
-      (i) =>
-        i.produto.id !==
-        ('id' in produtoOuItem ? (produtoOuItem as Produto).id : produtoId),
-    );
+      'produto' in produtoOuItem
+        ? produtoOuItem.produto.id
+        : (produtoOuItem as Produto).id;
+    this.itens = this.itens.filter((i) => i.produto.id !== produtoId);
   }
 
   finalizarPedido(metodo: MetodoPagamento): void {
-    if (this.itens.length === 0)
+    if (this.itens.length === 0) {
       throw new Error('O pedido precisa ter ao menos um item.');
-
+    }
     this.metodoPagamento = metodo;
     this.status = StatusPedido.AGUARDANDO_PAGAMENTO;
   }
 
   confirmarPagamento(): void {
-    if (this.status !== StatusPedido.AGUARDANDO_PAGAMENTO)
+    if (this.status !== StatusPedido.AGUARDANDO_PAGAMENTO) {
       throw new Error('Estado inválido para confirmar pagamento.');
-
+    }
     this.status = StatusPedido.PAGO;
   }
 
   enviarPedido(): void {
-    if (this.status !== StatusPedido.PAGO)
+    if (this.status !== StatusPedido.PAGO) {
       throw new Error('Somente pedidos pagos podem ser enviados.');
+    }
     this.status = StatusPedido.ENVIADO;
   }
 
   concluirPedido(): void {
-    if (this.status !== StatusPedido.ENVIADO)
+    if (this.status !== StatusPedido.ENVIADO) {
       throw new Error('O pedido precisa ser enviado antes de ser concluído.');
+    }
     this.status = StatusPedido.CONCLUIDO;
   }
 
   cancelar(motivo?: string): void {
-    if (this.status === StatusPedido.CONCLUIDO)
+    if (this.status === StatusPedido.CONCLUIDO) {
       throw new Error('Pedido concluído não pode ser cancelado');
+    }
     this.status = StatusPedido.CANCELADO;
-    if (motivo) this.observacao = motivo;
+    if (motivo) {
+      this.observacao = motivo;
+    }
+  }
+
+  private adicionarItemInicial(item: ItemPedido): void {
+    const existente = this.itens.find((i) => i.produto.id === item.produto.id);
+    if (existente) {
+      existente.quantidade += item.quantidade;
+    } else {
+      this.itens.push(item);
+    }
   }
 }
