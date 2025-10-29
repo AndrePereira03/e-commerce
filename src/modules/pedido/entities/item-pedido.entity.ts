@@ -12,11 +12,17 @@ export class ItemPedido {
     this.quantidade = quantidade;
     this.precoUnidade = precoUnidade;
 
-    if (!Number.isInteger(quantidade) || quantidade <= 0)
-      throw new Error('Quantidade deve ser maior que 0.');
+    if (!Number.isInteger(quantidade))
+      throw new Error('Quantidade deve ser inteira.');
 
-    if (new Decimal(produto.preco).isNegative()) {
-      throw new Error('Preço unitário inválido.');
+    if (quantidade <= 0)
+      throw new Error('Quantidade deve ser não nula e não negativa.');
+
+    if (
+      new Decimal(precoUnidade).isNegative() ||
+      new Decimal(precoUnidade).isZero()
+    ) {
+      throw new Error('Preço deve ser positivo.');
     }
   }
 

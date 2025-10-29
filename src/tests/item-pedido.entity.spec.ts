@@ -24,13 +24,36 @@ describe('ItemPedido (entidade)', () => {
   });
 
   it('rejeita quantidade zero ou negativa', () => {
-    expect(() => new ItemPedido(produtoA, 0, D('10'))).toThrow(/quantidade/i);
-    expect(() => new ItemPedido(produtoA, -1, D('10'))).toThrow(/quantidade/i);
+    expect(() => new ItemPedido(produtoA, 0, D('60'))).toThrow(
+      /quantidade.* nula/i,
+    );
+    expect(() => new ItemPedido(produtoA, -1, D('70'))).toThrow(
+      /quantidade.* negativa/i,
+    );
   });
 
   it('rejeita quantidade não inteira', () => {
     expect(() => new ItemPedido(produtoA, 1.5, D('10'))).toThrow(
-      /quantidade.* maior que/i,
+      /quantidade.* inteira/i,
     );
+  });
+  it('rejeita preço zero ou negativo', () => {
+    expect(() => new ItemPedido(produtoA, 1, D('0'))).toThrow(
+      /Preço.* positivo/i,
+    );
+  });
+
+  it('rejeita preço zero ou negativo', () => {
+    expect(() => new ItemPedido(produtoA, 1, D('-5'))).toThrow(
+      /Preço.* positivo/i,
+    );
+  });
+
+  //ideia de que, mudar algo em produto, não "quebra" item
+  it('atualiza nome produto e mantém as propriedades do item', () => {
+    const item = new ItemPedido(produtoA, 1, D('300'));
+    expect(item.produto).toBe(produtoA);
+    produtoA.nome = 'Teclado Atualizado';
+    expect(item.produto.nome).toBe('Teclado Atualizado');
   });
 });
