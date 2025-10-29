@@ -40,12 +40,8 @@ export function toPedido(dto: CriarPedidoDTO): Pedido {
     dto.enderecoEntrega,
     dto.metodoPagamento,
     dto.observacao,
-    itens[0]!,
+    itens,
   );
-
-  for (const item of itens) {
-    pedido.adicionarItem(item);
-  }
 
   return pedido;
 }

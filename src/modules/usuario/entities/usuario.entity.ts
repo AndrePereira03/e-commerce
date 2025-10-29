@@ -26,7 +26,7 @@ export class Usuario {
     this.dataNascimento = dataNascimento;
     this.role = role;
 
-    if (!emailValido(email)) throw new Error('E-mail inváilido.');
+    if (!emailValido(email)) throw new Error('E-mail inválido.');
     if (!cpfValido(cpf)) throw new Error('CPF inválido.');
     if (!nascimentoValido(dataNascimento))
       throw new Error('Data de nascimento inválida.');
